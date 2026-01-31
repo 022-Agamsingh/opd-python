@@ -3,9 +3,11 @@ import os
 from pydantic_settings import BaseSettings
 from typing import Dict
 
+# Load environment variables from .env file if it exists
+# In production, use proper environment variables instead
 
 class Settings(BaseSettings):
-    """Application settings"""
+    """Application settings loaded from env vars"""
     
     # Server
     PORT: int = 8000
@@ -18,12 +20,12 @@ class Settings(BaseSettings):
     DEFAULT_SLOT_DURATION: int = 10
     DEFAULT_MAX_CAPACITY: int = 6
     
-    # Priority Weights
-    EMERGENCY_PRIORITY: int = 1000
-    PAID_PRIORITY: int = 500
-    FOLLOWUP_PRIORITY: int = 300
-    ONLINE_PRIORITY: int = 200
-    WALKIN_PRIORITY: int = 100
+    # Priority Weights - higher number = higher priority in queue
+    EMERGENCY_PRIORITY: int = 1000  # critical cases
+    PAID_PRIORITY: int = 500        # priority/paid patients
+    FOLLOWUP_PRIORITY: int = 300    # returning patients
+    ONLINE_PRIORITY: int = 200      # pre-booked appointments
+    WALKIN_PRIORITY: int = 100      # walk-in patients
     
     # Timeout Configuration (in minutes)
     NO_SHOW_TIMEOUT: int = 15

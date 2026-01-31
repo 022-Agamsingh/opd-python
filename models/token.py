@@ -5,6 +5,8 @@ from datetime import datetime
 import uuid
 from config import TOKEN_STATUS, TOKEN_TYPES
 
+# Note: Using Pydantic v2 with alias support for MongoDB compatibility
+
 
 class Token(BaseModel):
     """Token model"""

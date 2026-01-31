@@ -7,6 +7,10 @@ from services.slot_service import slot_service
 from services.token_service import token_service
 from database import connect_db, disconnect_db
 
+# Simulation parameters - tweak these to test different scenarios
+NUM_DOCTORS = 3
+SLOTS_PER_DOCTOR = 3
+
 
 class OPDSimulation:
     """OPD Simulation for One Day"""
@@ -18,10 +22,10 @@ class OPDSimulation:
         self.events = []
     
     def log(self, message: str, log_type: str = "INFO"):
-        """Log simulation events"""
+        """Log simulation events with timestamp"""
         timestamp = datetime.now().strftime("%H:%M:%S")
         log_message = f"[{timestamp}] [{log_type}] {message}"
-        print(log_message)
+        print(log_message)  # Print to console for real-time monitoring
         self.events.append({"timestamp": timestamp, "type": log_type, "message": message})
     
     async def initialize_opd(self):

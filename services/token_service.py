@@ -8,6 +8,9 @@ from config import TOKEN_TYPES, TOKEN_STATUS, PRIORITY_WEIGHTS
 import uuid
 import time
 
+# Debug flag - set True for detailed logging during development
+DEBUG = False
+
 
 class TokenService:
     """Token service for core allocation algorithm and business logic"""
@@ -71,16 +74,21 @@ class TokenService:
         Calculate priority score for token
         Base priority from type + time factor for FIFO within same priority
         """
-        # Base score from priority weights
+        # Base score from priority weights config
         base_score = PRIORITY_WEIGHTS.get(token_type, 100)
         
-        # Add small time factor to ensure FIFO within same priority
-        # Use nanosecond precision divided by large number to keep it small
+        # Add small time factor to ensure FIFO within same priority level
+        # Dividing by 1B keeps it small enough to not affect priority order
+        # but large enough to maintain chronological order
         time_factor = time.time() / 1000000000
         
-        # Priority score = base + time factor
-        # Higher numbers = higher priority
-        return int(base_score + time_factor)
+        score = int(base_score + time_factor)
+        
+        # Uncomment for debugging priority issues
+        # if DEBUG:
+        #     print(f"Priority calc: {token_type} -> {score} (base: {base_score})")
+        
+        return score
     
     @staticmethod
     async def _assign_token_number(new_token: Token, slot_id: str):

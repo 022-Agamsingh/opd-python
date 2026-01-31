@@ -10,12 +10,15 @@ from config import settings
 from database import connect_db, disconnect_db
 from routes import doctor_router, slot_router, token_router
 
-# Configure logging
+# Setup logging - helps with debugging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Uncomment for more verbose logging during development
+# logging.getLogger("uvicorn").setLevel(logging.DEBUG)
 
 
 @asynccontextmanager
@@ -58,17 +61,26 @@ async def log_requests(request: Request, call_next):
     """Log all incoming requests"""
     logger.info(f"{datetime.utcnow().isoformat()} - {request.method} {request.url.path}")
     response = await call_next(request)
+    
+    # Uncomment to add response time tracking
+    # import time
+    # start = time.time()
+    # response = await call_next(request)
+    # duration = time.time() - start
+    # logger.info(f"Request took {duration:.4f}s")
+    
     return response
 
 
 # Health check endpoint
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """Simple health check - returns OK if server is running"""
     return {
         "status": "OK",
         "timestamp": datetime.utcnow().isoformat(),
         "service": "OPD Token Allocation Engine",
+        # "database": "connected"  # TODO: Add actual DB health check
     }
 
 

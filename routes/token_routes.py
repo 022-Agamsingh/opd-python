@@ -11,6 +11,8 @@ from models.token import (
 )
 from services.token_service import token_service
 
+# TODO: Add rate limiting to prevent abuse
+# TODO: Add authentication for certain endpoints
 router = APIRouter(prefix="/api/tokens", tags=["tokens"])
 
 
